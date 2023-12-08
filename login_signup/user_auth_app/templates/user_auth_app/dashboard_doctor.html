@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: larger;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Doctors Dashboard</h2>
+      <ul>
+        {% for doctor in doctor_info %}
+        <li>First name: {{ doctor.first_name }}</li>
+        <li>Last name: {{ doctor.last_name }}</li>
+        <li>Email: {{ doctor.email }}</li>
+        <li>Username: {{ doctor.username }}</li>
+        <li>State: {{ doctor.state }}</li>
+        <li>Address: {{ doctor.address_line1 }}</li>
+        <li>City: {{ doctor.city }}</li>
+        <li>Pincode: {{ doctor.pincode }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
