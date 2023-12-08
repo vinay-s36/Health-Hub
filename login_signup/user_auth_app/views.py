@@ -24,6 +24,9 @@ def signup(request):
             pincode = request.POST['pincode']
             user_type = request.POST['usertype']
 
+            if UserProfile.objects.filter(username=username).exists():
+                return render(request, 'user_auth_app/signup.html', {'error': "Username already exists. Please choose a different one."})
+
             if password == confirm_password:
                 hashed_password = make_password(password)
                 user = UserProfile(first_name=firstname, last_name=lastname, profile_picture=profilepic, username=username,
