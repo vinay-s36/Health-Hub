@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=128)
     address_line1 = models.CharField(max_length=255)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)

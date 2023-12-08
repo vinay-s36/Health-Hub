@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import UserProfile
 from django.utils.datastructures import MultiValueDictKeyError
+from django.contrib.auth.hashers import make_password, check_password
 
 
 def index(request):
@@ -24,8 +25,9 @@ def signup(request):
             user_type = request.POST['usertype']
 
             if password == confirm_password:
+                hashed_password = make_password(password)
                 user = UserProfile(first_name=firstname, last_name=lastname, profile_picture=profilepic, username=username,
-                                   email=email, password=password, address_line1=address_line1, city=city, state=state,
+                                   email=email, password=hashed_password, address_line1=address_line1, city=city, state=state,
                                    pincode=pincode, user_type=user_type)
                 user.save()
                 return redirect('/login/')
@@ -43,11 +45,14 @@ def login(request):
     if request.method == 'POST':
         try:
             username = request.POST['username']
-            password = request.POST['password']
+            entered_password = request.POST['password']
 
-            user = UserProfile.objects.get(
-                username=username, password=password)
-            if user:
+            try:
+                user = UserProfile.objects.get(username=username)
+            except UserProfile.DoesNotExist:
+                return render(request, 'user_auth_app/login.html', {'error': "Invalid Credentials!"})
+
+            if check_password(entered_password, user.password):
                 if user.user_type == 'doctor':
                     return redirect('/dashboard_doctor/')
                 elif user.user_type == 'patient':
@@ -56,8 +61,7 @@ def login(request):
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
             else:
                 return render(request, 'user_auth_app/login.html', {'error': "Invalid Credentials!"})
-        except UserProfile.DoesNotExist:
-            return render(request, 'user_auth_app/login.html', {'error': "Invalid Credentials!"})
+
         except MultiValueDictKeyError as e:
             print(f"KeyError: {e}")
             return render(request, 'user_auth_app/login.html', {'error': "Some form fields are missing."})
