@@ -55,9 +55,13 @@ def login(request):
 
             if check_password(entered_password, user.password):
                 if user.user_type == 'doctor':
-                    return redirect('/dashboard_doctor/')
+                    doctor_info = user
+                    return render(request, 'user_auth_app/dashboard_patient.html', {'patient_info': [doctor_info]})
+                    # return redirect('/dashboard_doctor/')
                 elif user.user_type == 'patient':
-                    return redirect('/dashboard_patient/')
+                    patient_info = user
+                    return render(request, 'user_auth_app/dashboard_patient.html', {'patient_info': [patient_info]})
+                    # return redirect('/dashboard_patient/')
                 else:
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
             else:
@@ -68,13 +72,3 @@ def login(request):
             return render(request, 'user_auth_app/login.html', {'error': "Some form fields are missing."})
     else:
         return render(request, 'user_auth_app/login.html')
-
-
-def dashboard_patient(request):
-    patient_info = UserProfile.objects.filter(user_type='patient')
-    return render(request, 'user_auth_app/dashboard_patient.html', {'patient_info': patient_info})
-
-
-def dashboard_doctor(request):
-    doctor_info = UserProfile.objects.filter(user_type='doctor')
-    return render(request, 'user_auth_app/dashboard_doctor.html', {'doctor_info': doctor_info})
