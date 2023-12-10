@@ -31,9 +31,7 @@ def signup(request):
                                    pincode=pincode, user_type=user_type)
                 user.save()
                 return redirect('/login/')
-            else:
-                print("Passwords don't match")
-                return render(request, 'user_auth_app/signup.html', {'error': "Passwords Don't Match!"})
+
         except MultiValueDictKeyError as e:
             print(f"KeyError: {e}")
             return render(request, 'user_auth_app/signup.html', {'error': "Some form fields are missing."})
