@@ -44,7 +44,8 @@
         color: #333;
       }
 
-      input {
+      input,
+      select {
         padding: 8px;
         margin-bottom: 15px;
         border: 1px solid #ccc;
@@ -75,6 +76,11 @@
       <h2>Sign Up</h2>
       <form method="post" action="/signup/">
         {% csrf_token %}
+        <label for="usertype">User type:</label>
+        <select id="usertype" name="usertype">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
         <label for="first_name">First Name:</label>
         <input type="text" id="first_name" name="firstname" required />
 
@@ -114,11 +120,7 @@
         <label for="pincode">Pincode:</label>
         <input type="text" id="pincode" name="pincode" required />
 
-        <label for="usertype">User type:</label>
-        <select id="usertype" name="usertype">
-          <option value="patient">Patient</option>
-          <option value="doctor">Doctor</option></select
-        ><br />
+        <br />
         <button type="submit">Sign Up</button>
         <p style="text-align: center">
           Already a user? <a href="/login"> Login </a>
