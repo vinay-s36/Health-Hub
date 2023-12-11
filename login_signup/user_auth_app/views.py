@@ -1,5 +1,6 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
-from .models import UserProfile
+from .models import UserProfile, Blog
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -56,11 +57,11 @@ def login(request):
             if check_password(entered_password, user.password):
                 if user.user_type == 'doctor':
                     doctor_info = user
-                    return render(request, 'user_auth_app/dashboard_patient.html', {'patient_info': [doctor_info]})
+                    return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username, 'doctor_info': [doctor_info]})
                     # return redirect('/dashboard_doctor/')
                 elif user.user_type == 'patient':
-                    patient_info = user
-                    return render(request, 'user_auth_app/dashboard_patient.html', {'patient_info': [patient_info]})
+                    # patient_info = user
+                    return render(request, 'user_auth_app/dashboard_patient.html', {'username': username})
                     # return redirect('/dashboard_patient/')
                 else:
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
@@ -72,3 +73,45 @@ def login(request):
             return render(request, 'user_auth_app/login.html', {'error': "Some form fields are missing."})
     else:
         return render(request, 'user_auth_app/login.html')
+
+
+def add_new_blog(request):
+    username = request.GET.get('username', None)
+
+    if username is None:
+        return HttpResponseBadRequest("Username parameter missing.")
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        category = request.POST.get('category')
+        summary = request.POST.get('summary')
+        content = request.POST.get('content')
+        is_draft = 'save_as_draft' in request.POST
+        image_url = request.POST.get('image')
+
+        Blog.objects.create(
+            title=title,
+            category=category,
+            summary=summary,
+            content=content,
+            is_draft=is_draft,
+            author=username,
+            image_url=image_url,
+        )
+
+        if is_draft:
+            return render(request, 'user_auth_app/addblog.html', {'username': username})
+        else:
+            return redirect('/success/')
+
+    return render(request, 'user_auth_app/addblog.html', {'username': username})
+
+
+def successpage(request):
+    return render(request, 'user_auth_app/successful.html')
+
+
+def view_blog(request):
+    posted_blogs = Blog.objects.filter(is_draft=False)
+    draft_blogs = Blog.objects.filter(is_draft=True)
+    return render(request, 'user_auth_app/blogs.html', {'posted_blogs': posted_blogs, 'draft_blogs': draft_blogs})

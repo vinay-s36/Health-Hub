@@ -5,18 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Doctor Dashboard</title>
     <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .header {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 1em;
+      }
+
       .container {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         font-size: larger;
+        margin: 20px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .button-container {
+        margin-top: 20px;
+        display: flex;
+        width: 100%;
+      }
+
+      .button {
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
       }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="header">
       <h2>Doctors Dashboard</h2>
+      <div class="button-container">
+        <button
+          class="button"
+          onclick="location.href='/addblog/?username={{ username }}'"
+        >
+          Add New Blog
+        </button>
+        <button class="button" onclick="location.href='/blogs/'">
+          View All Blogs
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
       <ul>
         {% for doctor in doctor_info %}
         <li>First name: {{ doctor.first_name }}</li>
