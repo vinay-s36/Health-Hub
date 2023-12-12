@@ -49,6 +49,12 @@
         margin-bottom: 20px;
       }
 
+      a {
+        color: #333;
+        font-size: larger;
+        font-weight: bold;
+      }
+
       ul {
         list-style: none;
         padding: 0;
@@ -80,41 +86,6 @@
         color: #555;
       }
 
-      dialog {
-        max-width: 80%;
-        padding: 20px;
-        border-radius: 10px;
-      }
-
-      dialog h2 {
-        color: #333;
-        margin-bottom: 10px;
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
-      }
-
-      dialog p {
-        margin: 0 0 15px;
-        color: #555;
-      }
-
-      dialog img {
-        max-width: 100%;
-        height: auto;
-        margin-top: 15px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-
-      dialog button {
-        padding: 10px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-      }
-
       #btn {
         padding: 10px;
         border-radius: 10px;
@@ -142,10 +113,8 @@
         {% if posted_blogs %}
         <ul>
           {% for blog in posted_blogs %}
-          <li
-            onclick="showDialog('{{ blog.title }}', '{{ blog.author }}', '{{ blog.summary }}', '{{ blog.content }}', '{{ blog.image_url }}')"
-          >
-            <h3>{{ blog.title }}</h3>
+          <li>
+            <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
             <p>Author: {{ blog.author }}</p>
             <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
             <p>Category: {{ blog.category }}</p>
@@ -161,10 +130,9 @@
         {% if draft_blogs %}
         <ul>
           {% for blog in draft_blogs %}
-          <li
-            onclick="showDialog('{{ blog.title }}', '{{ blog.author }}', '{{ blog.summary }}', '{{ blog.content }}', '{{ blog.image_url }}')"
-          >
-            <h3>{{ blog.title }}</h3>
+          <li>
+            <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
+
             <p>Author: {{ blog.author }}</p>
             <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
             <p>Category: {{ blog.category }}</p>
@@ -176,39 +144,5 @@
         {% endif %}
       </section>
     </main>
-
-    <dialog id="blogDialog">
-      <h2 id="dialogTitle"></h2>
-      <p id="dialogAuthor"></p>
-      <img id="dialogImage" alt="Blog Image" /><br />
-      <p id="dialogContent"></p>
-      <button onclick="closeDialog()">Close</button>
-    </dialog>
-
-    <script>
-      function showDialog(title, author, summary, content, imageUrl) {
-        const dialog = document.getElementById("blogDialog");
-
-        document.getElementById("dialogTitle").innerText = title;
-        document.getElementById("dialogAuthor").innerText = "Author: " + author;
-        document.getElementById("dialogContent").innerText = content;
-
-        const dialogImage = document.getElementById("dialogImage");
-
-        if (imageUrl) {
-          dialogImage.src = imageUrl;
-          dialogImage.style.display = "block";
-        } else {
-          dialogImage.style.display = "none";
-        }
-
-        dialog.showModal();
-      }
-
-      function closeDialog() {
-        const dialog = document.getElementById("blogDialog");
-        dialog.close();
-      }
-    </script>
   </body>
 </html>

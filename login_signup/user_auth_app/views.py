@@ -1,5 +1,5 @@
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import UserProfile, Blog
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.hashers import make_password, check_password
@@ -140,3 +140,13 @@ def patients_view_blog(request):
         blog_categories[category] = blogs_in_category
 
     return render(request, 'user_auth_app/patient_blogs.html', {'blog_categories': blog_categories})
+
+
+def blog_details_1(request, id):
+    blog = get_object_or_404(Blog, id=id)
+    return render(request, 'user_auth_app/blog_details_1.html', {'blog': blog})
+
+
+def blog_details_2(request, id):
+    blog = get_object_or_404(Blog, id=id)
+    return render(request, 'user_auth_app/blog_details_2.html', {'blog': blog})

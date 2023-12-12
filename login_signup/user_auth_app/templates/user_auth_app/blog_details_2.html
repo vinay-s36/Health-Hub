@@ -1,0 +1,78 @@
+<!-- user_auth_app/blog_details.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ blog.title }}</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+
+      main {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      section {
+        text-align: left;
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      p {
+        margin: 10px 0;
+        color: #555;
+      }
+
+      img {
+        max-width: 70%;
+        height: auto;
+        margin-top: 10px;
+      }
+
+      a {
+        display: block;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      header {
+        text-align: end;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a href="{% url 'patient_blogs' %}">Back to Blog List</a>
+    </header>
+    <main>
+      <section>
+        <h2>{{ blog.title }}</h2>
+        <p>Author: {{ blog.author }}</p>
+        <p>Date: {{ blog.date }}</p>
+        <img src="{{ blog.image_url }}" alt="Blog Image" /><br />
+        <p>{{ blog.content }}</p>
+      </section>
+    </main>
+  </body>
+</html>
