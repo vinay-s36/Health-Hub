@@ -94,6 +94,10 @@
         margin-top: 1px;
         margin-left: 90%;
       }
+
+      #date {
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
@@ -115,8 +119,8 @@
           {% for blog in posted_blogs %}
           <li>
             <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
-            <p>Author: {{ blog.author }}</p>
-            <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
+            <p id="date">Published {{ blog.date }}</p>
+            <p>{{ blog.summary|truncate_words:15 }}</p>
             <p>Category: {{ blog.category }}</p>
           </li>
           {% endfor %}
@@ -133,8 +137,8 @@
           <li>
             <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
 
-            <p>Author: {{ blog.author }}</p>
-            <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
+            <p id="date">Published {{ blog.date }}</p>
+            <p>{{ blog.summary|truncate_words:15 }}</p>
             <p>Category: {{ blog.category }}</p>
           </li>
           {% endfor %}

@@ -94,6 +94,10 @@
         margin-top: 1px;
         margin-left: 90%;
       }
+
+      #date {
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
@@ -113,9 +117,9 @@
           {% for blog in blogs %}
           <li>
             <a href="{% url 'blog_details_2' id=blog.id %}">{{ blog.title }}</a>
+            <p id="date">Published {{ blog.date }}</p>
             <p>Author: {{ blog.author }}</p>
-            <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
-            <p>Published on: {{ blog.date }}</p>
+            <p>{{ blog.summary|truncate_words:15 }}</p>
           </li>
           {% endfor %}
         </ul>
