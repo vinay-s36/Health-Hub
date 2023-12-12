@@ -52,6 +52,10 @@
         cursor: pointer;
         margin-right: 10px;
       }
+
+      #logout-btn {
+        margin-left: 1150px;
+      }
     </style>
   </head>
   <body>
@@ -69,6 +73,13 @@
           onclick="location.href='/doctor-dashboard/blogs/?username={{ username }}'"
         >
           View All Blogs
+        </button>
+        <button
+          id="logout-btn"
+          class="button"
+          onclick="location.href='/login/'"
+        >
+          Log out
         </button>
       </div>
     </div>
