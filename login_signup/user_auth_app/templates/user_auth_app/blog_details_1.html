@@ -57,8 +57,24 @@
       }
 
       header {
-        text-align: end;
+        text-align: center;
         margin-bottom: 20px;
+      }
+
+      button {
+        font-family: inherit;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: inline-end;
+        margin-top: 32px;
+      }
+
+      button:hover {
+        background-color: #45a049;
       }
     </style>
   </head>
@@ -76,6 +92,9 @@
         <p>Date: {{ blog.date }}</p>
         <img src="{{ blog.image_url }}" alt="Blog Image" /><br />
         <p>{{ blog.content }}</p>
+        {% if blog.is_draft %}
+        <button type="submit">Publish</button>
+        {% endif %}
       </section>
     </main>
   </body>
