@@ -127,7 +127,9 @@
   <body>
     <header>
       <h1>All Blogs</h1>
-      <button id="btn">Go To Dashboard</button>
+      <button id="btn" onclick="location.href='/doctor-dashboard/'">
+        Go To Dashboard
+      </button>
     </header>
 
     <main>
@@ -160,10 +162,7 @@
           >
             <h3>{{ blog.title }}</h3>
             <p>Author: {{ blog.author }}</p>
-            <p>
-              Summary: {% if blog.summary|wordcount <= 15 %}{{ blog.summary }}{%
-              else %}{{ blog.summary|truncatewords:15 }}...{% endif %}
-            </p>
+            <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
             <p>Category: {{ blog.category }}</p>
           </li>
           {% endfor %}

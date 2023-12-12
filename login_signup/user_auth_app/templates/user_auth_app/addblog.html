@@ -90,7 +90,7 @@
       <label for="content">Content:</label>
       <textarea id="content" name="content" rows="8" required></textarea>
 
-      <button type="submit">Publish</button
+      <button type="submit" onclick="showSuccessMessage()">Publish</button
       ><span
         ><input
           type="submit"
@@ -115,5 +115,9 @@
 
   function showDraftAlert() {
     alert("Your blog post has been saved as a draft.");
+  }
+
+  function showSuccessMessage() {
+    alert("Blog Post Published!");
   }
 </script>

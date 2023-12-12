@@ -56,13 +56,16 @@ def login(request):
 
             if check_password(entered_password, user.password):
                 if user.user_type == 'doctor':
-                    doctor_info = user
-                    return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username, 'doctor_info': [doctor_info]})
-                    # return redirect('/dashboard_doctor/')
+                    # doctor_info = user
+                    # return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username, 'doctor_info': [doctor_info]})
+                    redirect_url = f'/doctor-dashboard/?username={username}'
+                    return redirect(redirect_url)
+
                 elif user.user_type == 'patient':
-                    patient_info = user
-                    return render(request, 'user_auth_app/dashboard_patient.html', {'username': username, 'pateint_info': [patient_info]})
-                    # return redirect('/dashboard_patient/')
+                    # patient_info = user
+                    # return render(request, 'user_auth_app/dashboard_patient.html', {'username': username, 'pateint_info': [patient_info]})
+                    return redirect('/patient-dashboard/')
+
                 else:
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
             else:
@@ -100,9 +103,12 @@ def add_new_blog(request):
         )
 
         if is_draft:
-            return render(request, 'user_auth_app/addblog.html', {'username': username})
+            redirect_url = f'/doctor-dashboard/addblog/?username={username}'
+            return redirect(redirect_url)
+            # return render(request, 'user_auth_app/addblog.html', {'username': username})
         else:
-            return redirect('/success/')
+            redirect_url = f'/doctor-dashboard/?username={username}'
+            return redirect(redirect_url)
 
     return render(request, 'user_auth_app/addblog.html', {'username': username})
 
@@ -112,16 +118,14 @@ def patient_dashboard(request):
 
 
 def doctor_dashboard(request):
-    return render(request, 'user_auth_app/dashboard_doctor.html')
-
-
-def successpage(request):
-    return render(request, 'user_auth_app/successful.html')
+    username = request.GET.get('username', None)
+    return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username})
 
 
 def view_blog(request):
-    posted_blogs = Blog.objects.filter(is_draft=False)
-    draft_blogs = Blog.objects.filter(is_draft=True)
+    username = request.GET.get('username', None)
+    posted_blogs = Blog.objects.filter(is_draft=False, author=username)
+    draft_blogs = Blog.objects.filter(is_draft=True, author=username)
     return render(request, 'user_auth_app/blogs.html', {'posted_blogs': posted_blogs, 'draft_blogs': draft_blogs})
 
 

@@ -58,11 +58,14 @@
       <div class="button-container">
         <button
           class="button"
-          onclick="location.href='/addblog/?username={{ username }}'"
+          onclick="location.href='/doctor-dashboard/addblog/?username={{ username }}'"
         >
           Add New Blog
         </button>
-        <button class="button" onclick="location.href='/blogs/'">
+        <button
+          class="button"
+          onclick="location.href='/doctor-dashboard/blogs/?username={{ username }}'"
+        >
           View All Blogs
         </button>
       </div>
