@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Doctor Dashboard</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
+        font-family: "Poppins", sans-serif;
       }
 
       .header {
@@ -23,7 +24,7 @@
         justify-content: center;
         align-items: center;
         font-size: larger;
-        margin: 20px;
+        margin-top: 150px;
       }
 
       ul {
@@ -42,6 +43,7 @@
       }
 
       .button {
+        font-family: inherit;
         padding: 10px;
         background-color: #4caf50;
         color: white;
@@ -65,19 +67,6 @@
       </div>
     </div>
 
-    <div class="container">
-      <ul>
-        {% for patient in patient_info %}
-        <li>First name: {{ patient.first_name }}</li>
-        <li>Last name: {{ patient.last_name }}</li>
-        <li>Email: {{ patient.email }}</li>
-        <li>Username: {{ patient.username }}</li>
-        <li>State: {{ patient.state }}</li>
-        <li>Address: {{ patient.address_line1 }}</li>
-        <li>City: {{ patient.city }}</li>
-        <li>Pincode: {{ patient.pincode }}</li>
-        {% endfor %}
-      </ul>
-    </div>
+    <div class="container">Welcome Patient!</div>
   </body>
 </html>
