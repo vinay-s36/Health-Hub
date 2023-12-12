@@ -126,7 +126,7 @@ def view_blog(request):
     username = request.GET.get('username', None)
     posted_blogs = Blog.objects.filter(is_draft=False, author=username)
     draft_blogs = Blog.objects.filter(is_draft=True, author=username)
-    return render(request, 'user_auth_app/blogs.html', {'posted_blogs': posted_blogs, 'draft_blogs': draft_blogs})
+    return render(request, 'user_auth_app/blogs.html', {'posted_blogs': posted_blogs, 'draft_blogs': draft_blogs, 'username': username})
 
 
 def patients_view_blog(request):
