@@ -187,11 +187,14 @@
 
     <script>
       function showDialog(title, author, summary, content, imageUrl) {
+        const dialog = document.getElementById("blogDialog");
+
         document.getElementById("dialogTitle").innerText = title;
         document.getElementById("dialogAuthor").innerText = "Author: " + author;
         document.getElementById("dialogContent").innerText = content;
 
         const dialogImage = document.getElementById("dialogImage");
+
         if (imageUrl) {
           dialogImage.src = imageUrl;
           dialogImage.style.display = "block";
@@ -199,7 +202,6 @@
           dialogImage.style.display = "none";
         }
 
-        const dialog = document.getElementById("blogDialog");
         dialog.showModal();
       }
 

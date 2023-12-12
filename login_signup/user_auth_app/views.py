@@ -103,9 +103,8 @@ def add_new_blog(request):
         )
 
         if is_draft:
-            redirect_url = f'/doctor-dashboard/addblog/?username={username}'
+            redirect_url = f'/doctor-dashboard/?username={username}'
             return redirect(redirect_url)
-            # return render(request, 'user_auth_app/addblog.html', {'username': username})
         else:
             redirect_url = f'/doctor-dashboard/?username={username}'
             return redirect(redirect_url)
