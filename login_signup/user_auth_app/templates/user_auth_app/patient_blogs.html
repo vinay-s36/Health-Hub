@@ -80,10 +80,15 @@
         color: #555;
       }
 
-      a {
+      #title {
         color: #333;
         font-size: larger;
         font-weight: bold;
+        text-decoration: underline;
+      }
+
+      a {
+        text-decoration: none;
       }
 
       #btn {
@@ -116,10 +121,12 @@
         <ul>
           {% for blog in blogs %}
           <li>
-            <a href="{% url 'blog_details_2' id=blog.id %}">{{ blog.title }}</a>
-            <p id="date">Published {{ blog.date }}</p>
-            <p>Author: {{ blog.author }}</p>
-            <p>{{ blog.summary|truncate_words:15 }}</p>
+            <a href="{% url 'blog_details_2' id=blog.id %}">
+              <p id="title">{{ blog.title }}</p>
+              <p id="date">Published {{ blog.date }}</p>
+              <p>Author: {{ blog.author }}</p>
+              <p>{{ blog.summary|truncate_words:15 }}</p>
+            </a>
           </li>
           {% endfor %}
         </ul>

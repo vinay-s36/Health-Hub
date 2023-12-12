@@ -150,3 +150,14 @@ def blog_details_1(request, id):
 def blog_details_2(request, id):
     blog = get_object_or_404(Blog, id=id)
     return render(request, 'user_auth_app/blog_details_2.html', {'blog': blog})
+
+
+def update_blog_draft_status(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
+
+    # Update the is_draft value
+    blog.is_draft = False
+    blog.save()
+
+    redirect_url = f'/doctor-dashboard/?username={blog.author}'
+    return redirect(redirect_url)

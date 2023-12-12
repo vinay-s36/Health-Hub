@@ -93,7 +93,14 @@
         <img src="{{ blog.image_url }}" alt="Blog Image" /><br />
         <p>{{ blog.content }}</p>
         {% if blog.is_draft %}
-        <button type="submit">Publish</button>
+        <form
+          method="post"
+          action="{% url 'update_blog_draft_status' blog_id=blog.id %}"
+        >
+          {% csrf_token %}
+          <button type="submit">Publish</button>
+        </form>
+
         {% endif %}
       </section>
     </main>

@@ -49,10 +49,15 @@
         margin-bottom: 20px;
       }
 
-      a {
+      #title {
         color: #333;
         font-size: larger;
         font-weight: bold;
+        text-decoration: underline;
+      }
+
+      a {
+        text-decoration: none;
       }
 
       ul {
@@ -118,10 +123,12 @@
         <ul>
           {% for blog in posted_blogs %}
           <li>
-            <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
-            <p id="date">Published {{ blog.date }}</p>
-            <p>{{ blog.summary|truncate_words:15 }}</p>
-            <p>Category: {{ blog.category }}</p>
+            <a href="{% url 'blog_details_1' id=blog.id %}">
+              <p id="title">{{ blog.title }}</p>
+              <p id="date">Published {{ blog.date }}</p>
+              <p>{{ blog.summary|truncate_words:15 }}</p>
+              <p>Category: {{ blog.category }}</p>
+            </a>
           </li>
           {% endfor %}
         </ul>
@@ -135,11 +142,12 @@
         <ul>
           {% for blog in draft_blogs %}
           <li>
-            <a href="{% url 'blog_details_1' id=blog.id %}">{{ blog.title }}</a>
-
-            <p id="date">Published {{ blog.date }}</p>
-            <p>{{ blog.summary|truncate_words:15 }}</p>
-            <p>Category: {{ blog.category }}</p>
+            <a href="{% url 'blog_details_1' id=blog.id %}">
+              <p id="title">{{ blog.title }}</p>
+              <p id="date">Published {{ blog.date }}</p>
+              <p>{{ blog.summary|truncate_words:15 }}</p>
+              <p>Category: {{ blog.category }}</p>
+            </a>
           </li>
           {% endfor %}
         </ul>
