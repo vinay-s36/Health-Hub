@@ -11,7 +11,7 @@ urlpatterns = [
     path('doctor-dashboard/blogs/', view_blog, name='blogs'),
     path('doctor-dashboard/blogs/blog-details-1/<int:id>/',
          blog_details_1, name='blog_details_1'),
-    path('doctor-dashboard/blogs/blog-details-2/<int:id>/',
+    path('patient-dashboard/blogs/blog-details-2/<int:id>/',
          blog_details_2, name='blog_details_2'),
     path('patient-dashboard/view-blogs/',
          patients_view_blog, name='patient_blogs'),
