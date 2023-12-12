@@ -127,51 +127,33 @@
   <body>
     <header>
       <h1>All Blogs</h1>
-      <button id="btn">Go To Dashboard</button>
+      <button id="btn" onclick="location.href='/login/'">
+        Go To Dashboard
+      </button>
     </header>
 
     <main>
+      {% for category, blogs in blog_categories.items %}
       <section>
-        <h2>Posted Blogs</h2>
-        {% if posted_blogs %}
+        <h2>{{ category }}</h2>
+        {% if blogs %}
         <ul>
-          {% for blog in posted_blogs %}
+          {% for blog in blogs %}
           <li
             onclick="showDialog('{{ blog.title }}', '{{ blog.author }}', '{{ blog.summary }}', '{{ blog.content }}', '{{ blog.image_url }}')"
           >
             <h3>{{ blog.title }}</h3>
             <p>Author: {{ blog.author }}</p>
             <p>Summary: {{ blog.summary|truncate_words:15 }}</p>
-            <p>Category: {{ blog.category }}</p>
+            <p>Published on: {{ blog.date }}</p>
           </li>
           {% endfor %}
         </ul>
         {% else %}
-        <p>No posted blogs available.</p>
+        <p>No blogs available in the {{ category }} category.</p>
         {% endif %}
       </section>
-      <section>
-        <h2>Draft Blogs</h2>
-        {% if draft_blogs %}
-        <ul>
-          {% for blog in draft_blogs %}
-          <li
-            onclick="showDialog('{{ blog.title }}', '{{ blog.author }}', '{{ blog.summary }}', '{{ blog.content }}', '{{ blog.image_url }}')"
-          >
-            <h3>{{ blog.title }}</h3>
-            <p>Author: {{ blog.author }}</p>
-            <p>
-              Summary: {% if blog.summary|wordcount <= 15 %}{{ blog.summary }}{%
-              else %}{{ blog.summary|truncatewords:15 }}...{% endif %}
-            </p>
-            <p>Category: {{ blog.category }}</p>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>No draft blogs available.</p>
-        {% endif %}
-      </section>
+      {% endfor %}
     </main>
 
     <dialog id="blogDialog">

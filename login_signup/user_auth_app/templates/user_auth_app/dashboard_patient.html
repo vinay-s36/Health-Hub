@@ -54,16 +54,15 @@
   </head>
   <body>
     <div class="header">
-      <h2>Doctors Dashboard</h2>
+      <h2>Patients Dashboard</h2>
       <div class="button-container">
-        <button class="button" onclick="location.href='/blogs/'">
+        <button class="button" onclick="location.href='/view-blogs/'">
           View Blogs
         </button>
       </div>
     </div>
 
     <div class="container">
-      <h2>Patients Dashboard</h2>
       <ul>
         {% for patient in patient_info %}
         <li>First name: {{ patient.first_name }}</li>

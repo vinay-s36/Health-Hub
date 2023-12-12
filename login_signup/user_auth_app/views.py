@@ -60,8 +60,8 @@ def login(request):
                     return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username, 'doctor_info': [doctor_info]})
                     # return redirect('/dashboard_doctor/')
                 elif user.user_type == 'patient':
-                    # patient_info = user
-                    return render(request, 'user_auth_app/dashboard_patient.html', {'username': username})
+                    patient_info = user
+                    return render(request, 'user_auth_app/dashboard_patient.html', {'username': username, 'pateint_info': [patient_info]})
                     # return redirect('/dashboard_patient/')
                 else:
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
@@ -107,6 +107,14 @@ def add_new_blog(request):
     return render(request, 'user_auth_app/addblog.html', {'username': username})
 
 
+def patient_dashboard(request):
+    return render(request, 'user_auth_app/dashboard_patient.html')
+
+
+def doctor_dashboard(request):
+    return render(request, 'user_auth_app/dashboard_doctor.html')
+
+
 def successpage(request):
     return render(request, 'user_auth_app/successful.html')
 
@@ -115,3 +123,17 @@ def view_blog(request):
     posted_blogs = Blog.objects.filter(is_draft=False)
     draft_blogs = Blog.objects.filter(is_draft=True)
     return render(request, 'user_auth_app/blogs.html', {'posted_blogs': posted_blogs, 'draft_blogs': draft_blogs})
+
+
+def patients_view_blog(request):
+    categories = Blog.objects.filter(is_draft=False).values_list(
+        'category', flat=True).distinct()
+
+    blog_categories = {}
+
+    for category in categories:
+        blogs_in_category = Blog.objects.filter(
+            category=category, is_draft=False)
+        blog_categories[category] = blogs_in_category
+
+    return render(request, 'user_auth_app/patient_blogs.html', {'blog_categories': blog_categories})
