@@ -161,3 +161,13 @@ def update_blog_draft_status(request, blog_id):
 
     redirect_url = f'/doctor-dashboard/?username={blog.author}'
     return redirect(redirect_url)
+
+
+def delete_blog(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
+    author = blog.author
+    if request.method == "POST":
+        blog.delete()
+
+    redirect_url = f'/doctor-dashboard/?username={author}'
+    return redirect(redirect_url)
