@@ -1,4 +1,4 @@
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import UserProfile, Blog
 from django.utils.datastructures import MultiValueDictKeyError
@@ -14,7 +14,7 @@ def signup(request):
         try:
             firstname = request.POST['firstname']
             lastname = request.POST['lastname']
-            profilepic = request.POST['profilepicture']
+            profilepic = request.FILES['profilepicture']
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password']
@@ -64,7 +64,7 @@ def login(request):
                 elif user.user_type == 'patient':
                     # patient_info = user
                     # return render(request, 'user_auth_app/dashboard_patient.html', {'username': username, 'pateint_info': [patient_info]})
-                    return redirect('/patient-dashboard/')
+                    return redirect(f'/patient-dashboard/?username={username}')
 
                 else:
                     return render(request, 'user_auth_app/login.html', {'error': "Invalid user type."})
@@ -113,12 +113,21 @@ def add_new_blog(request):
 
 
 def patient_dashboard(request):
-    return render(request, 'user_auth_app/dashboard_patient.html')
+    try:
+        username = request.GET.get('username', None)
+        user = UserProfile.objects.get(username=username)
+        return render(request, 'user_auth_app/dashboard_patient.html', {'user': user})
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User not found", status=404)
 
 
 def doctor_dashboard(request):
-    username = request.GET.get('username', None)
-    return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username})
+    try:
+        username = request.GET.get('username', None)
+        user = UserProfile.objects.get(username=username)
+        return render(request, 'user_auth_app/dashboard_doctor.html', {'user': user})
+    except UserProfile.DoesNotExist:
+        return HttpResponse("User not found", status=404)
 
 
 def view_blog(request):

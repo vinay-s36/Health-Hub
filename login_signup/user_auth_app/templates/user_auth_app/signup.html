@@ -74,7 +74,7 @@
   <body>
     <div class="container">
       <h2>Sign Up</h2>
-      <form method="post" action="/signup/">
+      <form method="post" action="/signup/" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="usertype">User type:</label>
         <select id="usertype" name="usertype">

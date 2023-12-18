@@ -19,21 +19,30 @@
       }
 
       .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        font-size: larger;
-        margin-top: 150px;
+        justify-content: space-between;
       }
 
-      ul {
-        list-style: none;
-        padding: 0;
+      .info {
+        flex-grow: 1;
+        margin-right: 20px;
       }
 
-      li {
+      p {
         margin-bottom: 10px;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        max-height: 160px;
       }
 
       .button-container {
@@ -84,6 +93,23 @@
       </div>
     </div>
 
-    <div class="container">Welcome Doctor!</div>
+    <p style="text-align: center; font-size: larger">Welcome Doctor!</p>
+    <div class="container">
+      <div class="info">
+        <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+        <p>Username: {{ user.username }}</p>
+        <p>Email id: {{ user.email }}</p>
+        <p>
+          Address: {{ user.address_line1 }} {{ user.city }} {{ user.state }}
+        </p>
+        <p>Pincode: {{ user.pincode }}</p>
+      </div>
+      {% if user.profile_picture %}
+      <img
+        src="{{ user.profile_picture.url }}"
+        alt="{{ user.username }}'s Profile Picture"
+      />
+      {% endif %}
+    </div>
   </body>
 </html>
