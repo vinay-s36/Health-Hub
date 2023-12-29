@@ -138,6 +138,7 @@ def view_blog(request):
 
 
 def patients_view_blog(request):
+    username = request.GET.get('username', None)
     categories = Blog.objects.filter(is_draft=False).values_list(
         'category', flat=True).distinct()
 
@@ -148,7 +149,7 @@ def patients_view_blog(request):
             category=category, is_draft=False)
         blog_categories[category] = blogs_in_category
 
-    return render(request, 'user_auth_app/patient_blogs.html', {'blog_categories': blog_categories})
+    return render(request, 'user_auth_app/patient_blogs.html', {'blog_categories': blog_categories, 'username': username})
 
 
 def blog_details_1(request, id):
