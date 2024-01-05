@@ -236,8 +236,8 @@ def create_google_calendar_event(doctor_username, patient_username, appointment_
     service = build('calendar', 'v3', credentials=credentials)
 
     calendar_id = {
-        'vinay': "c5e5b47cdd4ac27c3ce22c938741485b56ef2871cb29ed01d35daa21b665e1df@group.calendar.google.com",
-        'strange': '7471037a24bf435aa7c6c2bbd164ee65caa7ce58cf61fb2822ceb0f60513ba37@group.calendar.google.com'
+        'DOCTOR1': "DOCTOR-1 CALENDAR ID",
+        'DOCTOR2': "DOCTOR-2 CALENDAR ID",
     }
     doctor_calendar_id = calendar_id[doctor_username]
 
