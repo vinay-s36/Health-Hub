@@ -1,5 +1,6 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 import re
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -222,10 +223,47 @@ def book_appointment(request):
             end_time=end_time
         )
         appointments.save()
+        create_google_calendar_event(
+            doctor_username, patient_username, appointment_date, start_time_str
+        )
         redirect_url = f'/patient-dashboard/appointment-list/?username={patient_username}'
         return redirect(redirect_url)
 
     return render(request, 'user_auth_app/book_appointment.html', {'doctor_info': doctor_info, 'username': username})
+
+
+def create_google_calendar_event(doctor_username, patient_username, appointment_date, start_time_str):
+    service = build('calendar', 'v3', credentials=credentials)
+
+    calendar_id = {
+        'vinay': "c5e5b47cdd4ac27c3ce22c938741485b56ef2871cb29ed01d35daa21b665e1df@group.calendar.google.com",
+        'strange': '7471037a24bf435aa7c6c2bbd164ee65caa7ce58cf61fb2822ceb0f60513ba37@group.calendar.google.com'
+    }
+    doctor_calendar_id = calendar_id[doctor_username]
+
+    appointment_datetime = datetime.strptime(
+        f'{appointment_date} {start_time_str}', '%Y-%m-%d %I:%M %p'
+    )
+
+    end_time = appointment_datetime + timedelta(minutes=45)
+
+    event = {
+        'summary': f'Appointment with {patient_username}',
+        'description': 'Appointment booked through the system.',
+        'start': {
+            'dateTime': appointment_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Asia/Kolkata',
+        },
+        'end': {
+            'dateTime': end_time.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Asia/Kolkata',
+        },
+    }
+
+    service.events().insert(
+        calendarId=doctor_calendar_id,
+        body=event,
+    ).execute()
 
 
 def calculate_end_time(start_time_str):
@@ -249,5 +287,4 @@ def calculate_end_time(start_time_str):
 def appointment_list(request):
     patient_name = request.GET.get('username', None)
     appointments = Appointments.objects.filter(patient=patient_name)
-    print(appointments)
     return render(request, 'user_auth_app/appointment_details.html', {'appointments': appointments, 'patient_name': patient_name})
