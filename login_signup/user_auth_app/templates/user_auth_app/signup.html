@@ -87,6 +87,25 @@
         <label for="last_name">Last Name:</label>
         <input type="text" id="last_name" name="lastname" required />
 
+        <label
+          for="specialization"
+          id="specializationLabel"
+          style="display: none"
+          >Specialization</label
+        >
+        <select id="specialization" name="specialization" style="display: none">
+          <option value="General Physician">General Physician</option>
+          <option value="Cardiologist">Cardiologist</option>
+          <option value="Dermatologist">Dermatologist</option>
+          <option value="Gynecologist">Gynecologist</option>
+          <option value="Neurologist">Neurologist</option>
+          <option value="Ophthalmologist">Ophthalmologist</option>
+          <option value="Orthopedist">Orthopedist</option>
+          <option value="Pediatrician">Pediatrician</option>
+          <option value="Psychiatrist">Psychiatrist</option>
+          <option value="Urologist">Urologist</option>
+        </select>
+
         <label for="profile_picture">Profile Picture:</label>
         <input type="file" id="profile_picture" name="profilepicture" />
 
@@ -141,6 +160,24 @@
           document.getElementById("wrong_pass_alert").innerHTML = "";
         }
       }
+
+      document
+        .getElementById("usertype")
+        .addEventListener("change", function () {
+          var usertype = document.getElementById("usertype").value;
+          var specializationLabel = document.getElementById(
+            "specializationLabel"
+          );
+          var specializationSelect = document.getElementById("specialization");
+
+          if (usertype == "doctor") {
+            specializationLabel.style.display = "block";
+            specializationSelect.style.display = "block";
+          } else {
+            specializationLabel.style.display = "none";
+            specializationSelect.style.display = "none";
+          }
+        });
     </script>
   </body>
 </html>

@@ -1,8 +1,22 @@
+from datetime import datetime, time
+import re
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import UserProfile, Blog
+from .models import UserProfile, Blog, Appointments
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.hashers import make_password, check_password
+import os
+from django.conf import settings
+
+BASE_DIR = settings.BASE_DIR
+
+key_path = os.path.join(BASE_DIR, 'config', 'service_account_key.json')
+credentials = service_account.Credentials.from_service_account_file(
+    key_path,
+    scopes=['https://www.googleapis.com/auth/calendar']
+)
 
 
 def index(request):
@@ -24,6 +38,10 @@ def signup(request):
             state = request.POST['state']
             pincode = request.POST['pincode']
             user_type = request.POST['usertype']
+            if user_type == 'doctor':
+                specialization = request.POST['specialization']
+            else:
+                specialization = ''
 
             if UserProfile.objects.filter(username=username).exists():
                 return render(request, 'user_auth_app/signup.html', {'error': "Username already exists. Please choose a different one."})
@@ -32,7 +50,7 @@ def signup(request):
                 hashed_password = make_password(password)
                 user = UserProfile(first_name=firstname, last_name=lastname, profile_picture=profilepic, username=username,
                                    email=email, password=hashed_password, address_line1=address_line1, city=city, state=state,
-                                   pincode=pincode, user_type=user_type)
+                                   pincode=pincode, user_type=user_type, specialization=specialization)
                 user.save()
                 return redirect('/login/')
 
@@ -56,14 +74,10 @@ def login(request):
 
             if check_password(entered_password, user.password):
                 if user.user_type == 'doctor':
-                    # doctor_info = user
-                    # return render(request, 'user_auth_app/dashboard_doctor.html', {'username': username, 'doctor_info': [doctor_info]})
                     redirect_url = f'/doctor-dashboard/?username={username}'
                     return redirect(redirect_url)
 
                 elif user.user_type == 'patient':
-                    # patient_info = user
-                    # return render(request, 'user_auth_app/dashboard_patient.html', {'username': username, 'pateint_info': [patient_info]})
                     return redirect(f'/patient-dashboard/?username={username}')
 
                 else:
@@ -165,7 +179,6 @@ def blog_details_2(request, id):
 def update_blog_draft_status(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
 
-    # Update the is_draft value
     blog.is_draft = False
     blog.save()
 
@@ -181,3 +194,60 @@ def delete_blog(request, blog_id):
 
     redirect_url = f'/doctor-dashboard/?username={author}'
     return redirect(redirect_url)
+
+
+def book_appointment(request):
+    username = request.GET.get('username', None)
+    doctor_info = UserProfile.objects.filter(user_type='doctor')
+
+    if request.method == 'POST':
+        doctor_username = request.POST.get('doctor-name')
+        patient_username = request.POST.get('patient-name')
+        specialization = request.POST.get('specialization')
+        appointment_date = request.POST.get('appointment-date')
+        start_time_str = request.POST.get('start-time')
+
+        try:
+            start_time = datetime.strptime(start_time_str, '%I:%M %p').time()
+        except ValueError:
+            return render(request, 'user_auth_app/book_appointment.html', {'doctor_info': doctor_info, 'username': username, 'error_message': 'Invalid time format'})
+
+        end_time = calculate_end_time(start_time_str)
+        appointments = Appointments(
+            doctor=doctor_username,
+            patient=patient_username,
+            specialization=specialization,
+            date=appointment_date,
+            start_time=start_time,
+            end_time=end_time
+        )
+        appointments.save()
+        redirect_url = f'/patient-dashboard/appointment-list/?username={patient_username}'
+        return redirect(redirect_url)
+
+    return render(request, 'user_auth_app/book_appointment.html', {'doctor_info': doctor_info, 'username': username})
+
+
+def calculate_end_time(start_time_str):
+    start_hour, start_minute, period = re.match(
+        r'(\d+):(\d+)\s*([APMapm]{0,2})', start_time_str).groups()
+    start_hour, start_minute = int(start_hour), int(start_minute)
+
+    if period and period.lower() == 'pm' and start_hour != 12:
+        start_hour += 12
+
+    total_minutes = start_hour * 60 + start_minute + 45
+
+    end_hour = total_minutes // 60
+    end_minute = total_minutes % 60
+
+    end_time = time(end_hour, end_minute)
+
+    return end_time
+
+
+def appointment_list(request):
+    patient_name = request.GET.get('username', None)
+    appointments = Appointments.objects.filter(patient=patient_name)
+    print(appointments)
+    return render(request, 'user_auth_app/appointment_details.html', {'appointments': appointments, 'patient_name': patient_name})

@@ -1,7 +1,7 @@
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
-from .views import signup, login, index, add_new_blog, view_blog, patients_view_blog, patient_dashboard, doctor_dashboard, blog_details_1, blog_details_2, update_blog_draft_status, delete_blog
+from .views import appointment_list, signup, login, index, add_new_blog, view_blog, patients_view_blog, patient_dashboard, doctor_dashboard, blog_details_1, blog_details_2, update_blog_draft_status, delete_blog, book_appointment
 
 urlpatterns = [
     path('signup/', signup, name='signup'),
@@ -21,6 +21,10 @@ urlpatterns = [
          name='update_blog_draft_status'),
     path('delete-blog/<int:blog_id>/', delete_blog,
          name='delete_blog'),
+    path('patient-dashboard/book-appointment/',
+         book_appointment, name='book_appointment'),
+    path('patient-dashboard/appointment-list/',
+         appointment_list, name='appointment_list'),
 ]
 
 

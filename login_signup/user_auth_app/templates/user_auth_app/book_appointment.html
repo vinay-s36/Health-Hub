@@ -1,0 +1,289 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Blogs</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      header {
+        width: 100%;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        width: 80%;
+      }
+
+      section {
+        width: 48%;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        color: #333;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      #btn {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        margin-top: 1px;
+        margin-left: 90%;
+      }
+
+      #date {
+        font-style: italic;
+      }
+
+      .book-appointment-btn {
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .book-appointment-btn:hover {
+        background-color: #0056b3;
+      }
+
+      #confirm {
+        padding: 10px;
+        background-color: green;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      #close {
+        padding: 10px;
+        background-color: red;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .popup {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .popup form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .popup label {
+        margin-bottom: 5px;
+      }
+
+      .popup input,
+      .popup button {
+        margin-bottom: 10px;
+      }
+
+      label {
+        margin-bottom: 10px;
+        font-weight: bold;
+        align-items: end;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: inherit;
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Book Appointments</h1>
+      <button
+        id="btn"
+        onclick="location.href='/patient-dashboard/?username={{username}}'"
+      >
+        Go To Dashboard
+      </button>
+    </header>
+
+    <main>
+      {% for doctor in doctor_info %}
+      <section>
+        <h2>Dr. {{ doctor.username }}</h2>
+        <p>Specialization: {{ doctor.specialization }}</p>
+        <img
+          src="{{ doctor.profile_picture.url }}"
+          alt="{{ doctor.username }}'s Profile Picture"
+          width="150"
+          height="150"
+        />
+        <br />
+        <button
+          class="book-appointment-btn"
+          id="book-appointment-btn-{{ doctor.username }}"
+          onclick="displayAppointmentForm('{{ doctor.username }}')"
+        >
+          Book Appointment
+        </button>
+
+        <!-- pop-up form -->
+        <div id="appointment-overlay-{{ doctor.username }}" class="overlay">
+          <div class="popup">
+            <form method="post" action="{% url 'book_appointment' %}">
+              {% csrf_token %}
+              <label for="doctor-name-{{ doctor.username }}"
+                >Doctor Name:</label
+              >
+              <input
+                type="text"
+                id="doctor-name-{{ doctor.username }}"
+                name="doctor-name"
+                value="{{ doctor.username }}"
+                readonly
+              />
+
+              <label for="specialization-{{ doctor.specialization }}"
+                >Specialization:</label
+              >
+              <input
+                type="text"
+                id="specialization-{{ doctor.specialization }}"
+                name="specialization"
+                value="{{ doctor.specialization }}"
+                readonly
+              />
+
+              <label for="patient-name-{{ username }}">Patient Name:</label>
+              <input
+                type="text"
+                id="patient-name-{{ username }}"
+                name="patient-name"
+                value="{{ username }}"
+                readonly
+              />
+
+              <label for="appointment-date-{{ doctor.username }}"
+                >Date of Appointment:</label
+              >
+              <input
+                type="date"
+                id="appointment-date-{{ doctor.username }}"
+                name="appointment-date"
+                required
+              />
+              <br />
+              <label for="start-time-{{ doctor.username }}"
+                >Start Time of Appointment:</label
+              >
+              <select
+                id="start-time-{{ doctor.username }}"
+                name="start-time"
+                required
+              >
+                <option value="08:00 AM">08:00 AM</option>
+                <option value="08:45 AM">08:45 AM</option>
+                <option value="09:30 AM">09:30 AM</option>
+                <option value="10:15 AM">10:15 AM</option>
+              </select>
+
+              <button id="confirm" type="submit">Confirm Appointment</button>
+            </form>
+            <button
+              id="close"
+              onclick="hideAppointmentForm('{{ doctor.username }}')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </section>
+      {% endfor %}
+    </main>
+
+    <!-- Javascript -->
+
+    <script>
+      function displayAppointmentForm(doctorUsername) {
+        const overlay = document.getElementById(
+          `appointment-overlay-${doctorUsername}`
+        );
+        overlay.style.display = "flex";
+      }
+
+      function hideAppointmentForm(doctorUsername) {
+        const overlay = document.getElementById(
+          `appointment-overlay-${doctorUsername}`
+        );
+        overlay.style.display = "none";
+      }
+    </script>
+  </body>
+</html>
